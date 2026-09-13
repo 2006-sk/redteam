@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tower Under Siege</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- WebGL siege renders here -->
+    <canvas id="stage"></canvas>
+
+    <!-- Full-screen white flash used for critical strikes -->
+    <div id="flash"></div>
+    <!-- Scanline / vignette overlay for the CRT wireframe look -->
+    <div id="overlay-fx"></div>
+
+    <!-- ───────── HUD (monochrome, built by ui/hud.js) ───────── -->
+    <div id="hud">
+      <header id="hud-top">
+        <div id="brand">
+          <div class="title">TOWER&nbsp;UNDER&nbsp;SIEGE</div>
+          <div class="subtitle" id="target-name">acquiring target…</div>
+        </div>
+        <div id="conn" class="conn conn-down"><span class="dot"></span><span id="conn-text">CONNECTING</span></div>
+      </header>
+
+      <section id="hud-stats">
+        <div class="stat">
+          <div class="stat-label">STRUCTURAL INTEGRITY</div>
+          <div class="stat-value"><span id="health-num">100</span><span class="unit">%</span></div>
+          <div class="health-bar"><div id="health-fill"></div></div>
+        </div>
+        <div class="stat small">
+          <div class="stat-label">WEAKNESSES</div>
+          <div class="stat-value" id="weak-num">0</div>
+        </div>
+        <div class="stat small">
+          <div class="stat-label">EVENTS</div>
+          <div class="stat-value" id="seq-num">0</div>
+        </div>
+      </section>
+
+      <aside id="roster">
+        <div class="panel-label">SWARM · 5 AGENTS</div>
+        <ul id="roster-list"></ul>
+      </aside>
+
+      <section id="charts">
+        <div class="chart-box">
+          <div class="panel-label">INTEGRITY OVER TIME</div>
+          <canvas id="chart-health" width="360" height="90"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="panel-label">ATTACK BREAKDOWN</div>
+          <canvas id="chart-breakdown" width="360" height="90"></canvas>
+        </div>
+      </section>
+
+      <section id="banner">
+        <div class="panel-label">LIVE&nbsp;·&nbsp;WEAKNESS FEED</div>
+        <ul id="banner-list"></ul>
+      </section>
+
+      <footer id="hud-help">
+        <span><b>S</b> sim</span><span><b>C</b> critical</span><span><b>R</b> reset</span>
+        <span><b>T</b> target</span><span><b>H</b> hud</span><span><b>drag</b> orbit</span>
+      </footer>
+    </div>
+
+    <!-- ───────── Flow overlays: folder-select → loading → command center ───────── -->
+    <style>
+      .screen{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+        background:radial-gradient(ellipse at center,#0a0a0f 0%,#000 80%);color:#e8e8ef;
+        font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+      .screen[hidden]{display:none!important}
+      .screen .box{width:min(560px,92vw);border:1px solid #ffffff22;border-radius:14px;padding:34px;background:#0000004d;backdrop-filter:blur(2px)}
+      .screen h1{font-size:13px;letter-spacing:.4em;color:#9aa0b5;margin:0 0 6px;font-weight:600}
+      .screen h2{font-size:26px;margin:0 0 18px;letter-spacing:.02em}
+      .screen p{color:#8a90a6;font-size:13px;line-height:1.6}
+      .drop{border:1px dashed #ffffff33;border-radius:10px;padding:26px;text-align:center;margin:18px 0;cursor:pointer;transition:.15s}
+      .drop:hover{border-color:#fff;background:#ffffff08}
+      .drop b{color:#fff}
+      .fbtn{display:inline-block;background:#fff;color:#000;font-weight:700;padding:12px 26px;border-radius:9px;border:0;cursor:pointer;font:inherit;letter-spacing:.05em}
+      .fbtn:disabled{opacity:.35;cursor:not-allowed}
+      .fghost{background:transparent;color:#9aa0b5;border:1px solid #ffffff22;margin-left:10px}
+      .picked{color:#fff;font-size:13px;margin-top:6px}
+      .spinner{width:46px;height:46px;border:3px solid #ffffff1a;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .bootlog{margin-top:18px;height:150px;overflow:auto;font-size:12px;color:#7de3a9;background:#00000066;border:1px solid #ffffff14;border-radius:8px;padding:12px;text-align:left;white-space:pre-wrap}
+      .bootlog div{opacity:.9;margin:2px 0}
+      .barwrap{height:4px;background:#ffffff14;border-radius:3px;overflow:hidden;margin-top:16px}
+      .bar{height:100%;width:30%;background:#fff;animation:slide 1.4s ease-in-out infinite}
+      @keyframes slide{0%{margin-left:-30%}100%{margin-left:100%}}
+    </style>
+
+    <div class="screen" id="screen-folder">
+      <div class="box">
+        <h1>TOWER&nbsp;SIEGE</h1>
+        <h2>Select a project to attack</h2>
+        <p>Point the swarm at a codebase. Five autonomous agents will boot it in an isolated Wasmer sandbox and probe it for vulnerabilities — live.</p>
+        <label class="drop" id="drop">
+          <input type="file" id="folder-input" webkitdirectory directory multiple hidden />
+          <div>📁 <b>Choose a folder</b> or drop one here</div>
+          <div class="picked" id="folder-name"></div>
+        </label>
+        <button class="fbtn" id="folder-run" disabled>Launch siege ▶</button>
+        <button class="fbtn fghost" id="folder-skip">Use demo target</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-loading" hidden>
+      <div class="box" style="text-align:center">
+        <div class="spinner"></div>
+        <h1>PREPARING SANDBOX</h1>
+        <h2 id="loading-title">Booting Wasmer…</h2>
+        <p>Spinning up an isolated WASIX sandbox and loading the target. The command center opens the moment it's ready.</p>
+        <div class="barwrap"><div class="bar"></div></div>
+        <div class="bootlog" id="boot-log"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -13,7 +13,7 @@ import { WebSocketServer } from "ws";
 import { validateEvent, SEVERITY_DAMAGE } from "./contract.mjs";
 import { SharedMemory } from "./memory.mjs";
 
-export function createCoordinator({ port = 8080, startHealth = 100 } = {}) {
+export function createCoordinator({ port = 8080, startHealth = 100, extraRoutes = null } = {}) {
   const memory = new SharedMemory();
   const eventLog = [];
   let health = startHealth;
@@ -61,6 +61,13 @@ export function createCoordinator({ port = 8080, startHealth = 100 } = {}) {
     };
     const json = (code, body) => { res.writeHead(code, { "content-type": "application/json", ...cors }); res.end(JSON.stringify(body)); };
     if (req.method === "OPTIONS") { res.writeHead(204, cors); return res.end(); }
+
+    // Orchestrator hook: lets a wrapper add /api/* + serve the static frontend
+    // on the SAME port as the WS feed. Tried before the built-in routes.
+    if (extraRoutes) {
+      try { if (await extraRoutes(req, res, url)) return; }
+      catch (e) { return json(500, { error: String(e) }); }
+    }
 
     if (url.pathname === "/health" && req.method === "GET")
       return json(200, { ok: true, tower_health: health, events: eventLog.length, ws_clients: wss.clients.size });

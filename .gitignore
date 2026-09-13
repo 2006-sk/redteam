@@ -8,3 +8,5 @@ tower/logs/
 tower/__pycache__/
 tower/src/__pycache__/
 **/__pycache__/
+frontend/dist/
+_*.log
