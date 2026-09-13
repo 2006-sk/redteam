@@ -1,0 +1,23 @@
+{
+  "name": "tower-siege-agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shresth's layer: 5 autonomous LLM-driven red-team agents (one Tenki VM each) + shared attack memory + the Coordinator that ingests events and broadcasts them over WebSocket to the frontend.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "mock": "node src/mock-events.mjs",
+    "target": "node src/mock-target.mjs",
+    "bank": "node src/towerbank.mjs",
+    "report": "node --env-file=.env test/run-report.mjs",
+    "swarm": "node --env-file=.env src/run-swarm.mjs",
+    "swarm:real": "TENKI_MODE=real node --env-file=.env src/run-swarm.mjs",
+    "smoke": "node --env-file=.env test/smoke.mjs",
+    "e2e": "node --env-file=.env test/real-e2e.mjs",
+    "clean": "node --env-file=.env src/cleanup-vms.mjs"
+  },
+  "dependencies": {
+    "@tenkicloud/sandbox": "^1.0.6",
+    "ws": "^8.18.0"
+  }
+}
