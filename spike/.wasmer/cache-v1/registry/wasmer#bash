@@ -1,0 +1,73 @@
+{
+  "unix_timestamp": 1789322814,
+  "package_name": "wasmer/bash",
+  "response": {
+    "data": {
+      "getPackage": {
+        "packageName": "bash",
+        "namespace": "wasmer",
+        "versions": [
+          {
+            "version": "1.0.25",
+            "isArchived": false,
+            "v2": {
+              "piritaDownloadUrl": null,
+              "piritaSha256Hash": null,
+              "webcManifest": null
+            },
+            "v3": {
+              "piritaDownloadUrl": "https://cdn.wasmer.io/webcimages/059606d132e2e6bc1afe3b432ee64dcb1b1b059815c8bb213cf3b24798ef21e1.webc",
+              "piritaSha256Hash": "059606d132e2e6bc1afe3b432ee64dcb1b1b059815c8bb213cf3b24798ef21e1",
+              "webcManifest": "{\"atoms\":{\"bash\":{\"kind\":\"https://webc.org/kind/wasm\",\"signature\":\"sha256:Wzep+V/KUPVQJLf8N7eG+oACTlUyAmbLGZNnKdJMcM4=\"}},\"commands\":{\"bash\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"},\"sh\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"}},\"entrypoint\":\"bash\",\"package\":{\"wapm\":{\"license\":\"GNU\"}},\"use\":{\"wasmer/coreutils\":\"wasmer/coreutils@^1.0.19\"}}"
+            }
+          },
+          {
+            "version": "1.0.24",
+            "isArchived": false,
+            "v2": {
+              "piritaDownloadUrl": null,
+              "piritaSha256Hash": null,
+              "webcManifest": null
+            },
+            "v3": {
+              "piritaDownloadUrl": "https://cdn.wasmer.io/webcimages/6616eee914dd95cb9751a0ef1d17a908055176781bc0b6090e33da5bbc325417.webc",
+              "piritaSha256Hash": "6616eee914dd95cb9751a0ef1d17a908055176781bc0b6090e33da5bbc325417",
+              "webcManifest": "{\"atoms\":{\"bash\":{\"kind\":\"https://webc.org/kind/wasm\",\"signature\":\"sha256:8uB8G7dC9q+0uILZDjBGObVccLVHB4NbRGsx2ZCXClE=\"}},\"commands\":{\"bash\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"},\"sh\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"}},\"entrypoint\":\"bash\",\"package\":{\"wapm\":{\"license\":\"GNU\"}},\"use\":{\"wasmer/coreutils\":\"wasmer/coreutils@^1.0.19\"}}"
+            }
+          },
+          {
+            "version": "1.0.21",
+            "isArchived": false,
+            "v2": {
+              "piritaDownloadUrl": null,
+              "piritaSha256Hash": null,
+              "webcManifest": null
+            },
+            "v3": {
+              "piritaDownloadUrl": "https://cdn.wasmer.io/webcimages/2d71072b8f2eff804bba8f3edeadca8d52855f31e474b8c4d40b8b898f5fcb39.webc",
+              "piritaSha256Hash": "2d71072b8f2eff804bba8f3edeadca8d52855f31e474b8c4d40b8b898f5fcb39",
+              "webcManifest": "{\"atoms\":{\"bash\":{\"kind\":\"https://webc.org/kind/wasm\",\"signature\":\"sha256:oCCm+II0opBqUqJwOgWmXyvQR6ARHZ1VaMRaTsVTIzQ=\"}},\"commands\":{\"bash\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"},\"sh\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"}},\"entrypoint\":\"bash\",\"package\":{\"wapm\":{\"license\":\"GNU\"}},\"use\":{\"wasmer/coreutils\":\"wasmer/coreutils@^1.0.19\"}}"
+            }
+          },
+          {
+            "version": "1.0.20",
+            "isArchived": false,
+            "v2": {
+              "piritaDownloadUrl": null,
+              "piritaSha256Hash": null,
+              "webcManifest": null
+            },
+            "v3": {
+              "piritaDownloadUrl": "https://cdn.wasmer.io/webcimages/21895eec9f16b0ef88682c9cf4b5de3c5dd37fbc2ed0c34254f6b14c6b8d5b0a.webc",
+              "piritaSha256Hash": "21895eec9f16b0ef88682c9cf4b5de3c5dd37fbc2ed0c34254f6b14c6b8d5b0a",
+              "webcManifest": "{\"atoms\":{\"bash\":{\"kind\":\"https://webc.org/kind/wasm\",\"signature\":\"sha256:oCCm+II0opBqUqJwOgWmXyvQR6ARHZ1VaMRaTsVTIzQ=\"}},\"commands\":{\"bash\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"},\"sh\":{\"annotations\":{\"atom\":{\"name\":\"bash\"},\"wasi\":{\"atom\":\"bash\"}},\"runner\":\"https://webc.org/runner/wasi\"}},\"package\":{\"wapm\":{\"license\":\"GNU\"}},\"use\":{\"wasmer/coreutils\":\"wasmer/coreutils@^1.0.19\"}}"
+            }
+          }
+        ]
+      },
+      "info": {
+        "defaultFrontend": "https://wasmer.io/"
+      }
+    }
+  }
+}

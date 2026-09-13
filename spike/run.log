@@ -1,0 +1,7 @@
+[+] sandbox created in 1461ms
+[1] stdout: "HELLO FROM WASM SANDBOX" exit: [33m0[39m
+[2] read /etc/passwd -> exit: [33m1[39m | reason: exited
+    stderr: [1;35mFileNotFoundError[0m: [35m[Errno 44] No such file or directory: '/etc/passwd'[0m
+[3] outbound socket -> exit: [33m1[39m | reason: exited
+    stderr: [1;35mOSError[0m: [35m[Errno 58] Not supported[0m
+[4] infinite loop -> reason: timeout after 1578ms

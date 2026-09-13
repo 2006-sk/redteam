@@ -1,0 +1,1 @@
+{"name":"wasmer-spike","private":true,"type":"module","dependencies":{"@wasmer/sdk":"^0.13.0"}}
