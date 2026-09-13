@@ -1,0 +1,9 @@
+node_modules/
+.wasmer/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+logs/
+.DS_Store
