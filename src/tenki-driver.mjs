@@ -17,6 +17,8 @@
 // ⚠️ The real path calls a live product whose exact CLI/SDK shape you MUST
 //    confirm against current docs (README says so). Every live call below is
 //    marked `// VERIFY`. Do the 3-command sanity check in the README first.
+import http from "node:http";
+
 // Read lazily (at call time), not at import — env is often set after imports.
 const targetBaseUrl = () => process.env.TARGET_BASE_URL || "http://localhost:9090";
 
@@ -37,20 +39,39 @@ export class MockTenkiDriver {
   }
   async runAttack(vm, req) {
     const t = Date.now();
-    try {
-      const res = await fetch(targetBaseUrl() + req.path, {
-        method: req.method || "GET",
-        headers: req.headers || {},
-        body: req.body,
-        signal: AbortSignal.timeout(req.timeoutMs || 5000),
-      });
-      const body = await res.text();
-      return { status: res.status, body, elapsed_ms: Date.now() - t, from: vm.id };
-    } catch (e) {
-      return { status: 0, body: "", error: String(e), elapsed_ms: Date.now() - t, from: vm.id };
+    // Fresh connection per request (agent:false) + retries. The target may be a
+    // single-threaded server behind a Wasmer WASIX socket bridge, which is
+    // unreliable with pooled/keep-alive connections — so we don't pool.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const res = await httpOnce(targetBaseUrl(), req);
+      if (res.status !== 0) return { ...res, elapsed_ms: Date.now() - t, from: vm.id };
+      await sleep(120 * (attempt + 1));
     }
+    return { status: 0, body: "", error: "unreachable after retries", elapsed_ms: Date.now() - t, from: vm.id };
   }
   async destroyVM() { /* nothing to tear down */ }
+}
+
+function httpOnce(base, req) {
+  return new Promise((resolve) => {
+    let u;
+    try { u = new URL(base + req.path); } catch (e) { return resolve({ status: 0, body: "", error: String(e) }); }
+    const data = req.body == null ? null : (typeof req.body === "string" ? req.body : JSON.stringify(req.body));
+    const opts = {
+      method: req.method || "GET", hostname: u.hostname, port: u.port || 80,
+      path: u.pathname + u.search, agent: false, timeout: req.timeoutMs || 5000,
+      headers: { ...(req.headers || {}), ...(data ? { "content-length": Buffer.byteLength(data) } : {}) },
+    };
+    const r = http.request(opts, (res) => {
+      let body = ""; res.setEncoding("utf8");
+      res.on("data", c => body += c);
+      res.on("end", () => resolve({ status: res.statusCode, body }));
+    });
+    r.on("error", (e) => resolve({ status: 0, body: "", error: String(e) }));
+    r.on("timeout", () => { r.destroy(); resolve({ status: 0, body: "", error: "timeout" }); });
+    if (data) r.write(data);
+    r.end();
+  });
 }
 
 // ── REAL ────────────────────────────────────────────────────────────────

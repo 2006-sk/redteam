@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Shresth's layer: 5 autonomous LLM-driven red-team agents (one Tenki VM each) + shared attack memory + the Coordinator that ingests events and broadcasts them over WebSocket to the frontend.",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "mock": "node src/mock-events.mjs",
     "target": "node src/mock-target.mjs",
@@ -14,7 +16,9 @@
     "swarm:real": "TENKI_MODE=real node --env-file=.env src/run-swarm.mjs",
     "smoke": "node --env-file=.env test/smoke.mjs",
     "e2e": "node --env-file=.env test/real-e2e.mjs",
-    "clean": "node --env-file=.env src/cleanup-vms.mjs"
+    "clean": "node --env-file=.env src/cleanup-vms.mjs",
+    "e2e:wasmer": "node --env-file=.env test/e2e-wasmer.mjs",
+    "tower": "cd tower && .venv/bin/python run.py"
   },
   "dependencies": {
     "@tenkicloud/sandbox": "^1.0.6",

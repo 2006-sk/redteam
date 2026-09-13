@@ -1,3 +1,10 @@
 node_modules/
-*.log
 .env
+*.log
+.wasmer/
+tower/.venv/
+tower/.wasmer/
+tower/logs/
+tower/__pycache__/
+tower/src/__pycache__/
+**/__pycache__/

@@ -35,12 +35,15 @@ export function makeEvent({
   };
 }
 
-/** Returns null if valid, else a string describing the first problem. */
+/** Returns null if valid, else a string describing the first problem.
+ *  Lenient on agent_persona: the target emits persona "tower" for its own
+ *  health/instrumentation events, so accept any string (or null) here — only
+ *  makeEvent (used by our own agents) enforces the known-persona list. */
 export function validateEvent(e) {
   if (!e || typeof e !== "object") return "not an object";
   if (!EVENT_TYPES.includes(e.event_type)) return `event_type: ${e.event_type}`;
   if (!SEVERITIES.includes(e.severity)) return `severity: ${e.severity}`;
-  if (e.agent_persona != null && !PERSONAS.includes(e.agent_persona)) return `agent_persona: ${e.agent_persona}`;
+  if (e.agent_persona != null && typeof e.agent_persona !== "string") return `agent_persona: ${e.agent_persona}`;
   if (typeof e.description !== "string") return "description not a string";
   if (typeof e.health_delta !== "number") return "health_delta not a number";
   return null;
