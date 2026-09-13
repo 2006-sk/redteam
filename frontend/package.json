@@ -1,0 +1,22 @@
+{
+  "name": "tower-siege-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kenil's layer: the visual siege. A white wireframe target under attack by a 5-jet swarm, driven live by the Coordinator's WebSocket feed. Monochrome (white on black) for maximum shock factor.",
+  "scripts": {
+    "dev": "concurrently -k -n MOCK,WEB -c white,gray \"npm:mock\" \"npm:web\"",
+    "web": "vite",
+    "mock": "node mock-server/server.mjs",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "vite": "^5.4.0",
+    "ws": "^8.18.0"
+  }
+}

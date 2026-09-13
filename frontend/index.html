@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tower Under Siege</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- WebGL siege renders here -->
+    <canvas id="stage"></canvas>
+
+    <!-- Full-screen white flash used for critical strikes -->
+    <div id="flash"></div>
+    <!-- Scanline / vignette overlay for the CRT wireframe look -->
+    <div id="overlay-fx"></div>
+
+    <!-- ───────── HUD (monochrome, built by ui/hud.js) ───────── -->
+    <div id="hud">
+      <header id="hud-top">
+        <div id="brand">
+          <div class="title">TOWER&nbsp;UNDER&nbsp;SIEGE</div>
+          <div class="subtitle" id="target-name">acquiring target…</div>
+        </div>
+        <div id="conn" class="conn conn-down"><span class="dot"></span><span id="conn-text">CONNECTING</span></div>
+      </header>
+
+      <section id="hud-stats">
+        <div class="stat">
+          <div class="stat-label">STRUCTURAL INTEGRITY</div>
+          <div class="stat-value"><span id="health-num">100</span><span class="unit">%</span></div>
+          <div class="health-bar"><div id="health-fill"></div></div>
+        </div>
+        <div class="stat small">
+          <div class="stat-label">WEAKNESSES</div>
+          <div class="stat-value" id="weak-num">0</div>
+        </div>
+        <div class="stat small">
+          <div class="stat-label">EVENTS</div>
+          <div class="stat-value" id="seq-num">0</div>
+        </div>
+      </section>
+
+      <aside id="roster">
+        <div class="panel-label">SWARM · 5 AGENTS</div>
+        <ul id="roster-list"></ul>
+      </aside>
+
+      <section id="charts">
+        <div class="chart-box">
+          <div class="panel-label">INTEGRITY OVER TIME</div>
+          <canvas id="chart-health" width="360" height="90"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="panel-label">ATTACK BREAKDOWN</div>
+          <canvas id="chart-breakdown" width="360" height="90"></canvas>
+        </div>
+      </section>
+
+      <section id="banner">
+        <div class="panel-label">LIVE&nbsp;·&nbsp;WEAKNESS FEED</div>
+        <ul id="banner-list"></ul>
+      </section>
+
+      <footer id="hud-help">
+        <span><b>S</b> sim</span><span><b>C</b> critical</span><span><b>R</b> reset</span>
+        <span><b>T</b> target</span><span><b>H</b> hud</span><span><b>drag</b> orbit</span>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
